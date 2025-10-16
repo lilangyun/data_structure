@@ -1,6 +1,7 @@
 #include<iostream>
 using namespace std;
 
+// 自己竟然全部实现错了，啊！
 
 // 我们先默认数据类型为int类型
 typedef struct node{
@@ -10,21 +11,31 @@ typedef struct node{
 }node;
 // 默认双向链表无头结点
 
-// 尾插法
-void init_end(node *&head,int val){
+// 我们把创建新节点封装成一个函数，减少代码量
+node *creat_newnode(int val){
     node *newnode=new node;
     newnode->data=val;
     newnode->prev=NULL;
     newnode->next=NULL;
+    return newnode;
+}
+
+// 尾插法
+void init_end(node *&head,int val){
+    node *newnode=creat_newnode(val);
+    // 建立新节点
     if(head==NULL){
         head=newnode;
         return ;
     }
+    // 如果双向链表为空，就将新的结点作为首结点
     node *tmp=head;
     while(tmp!=NULL){
         if(tmp->next==NULL){
+            // 如果tmp为最后一个元素，就退出循环将元素插至tmp之后
             break;
         }
+        // 否则就一直向后移动
         tmp=tmp->next;
     }
     // 此时tmp指向最后一个元素
@@ -32,134 +43,106 @@ void init_end(node *&head,int val){
     newnode->prev=tmp;
 }
 
-// 双向链表插入1[工作结点指向index]
-void insert1_two_way_list(node *&head,int index,int val){
-    if(!head||index<0){
-        printf("Invalid parameters to insert_elem\n");
-        return;
-    }
-    // 建立新结点
-    node *newnode=new node;
-    newnode->data=val;
-    newnode->prev=NULL;
-    newnode->next=NULL;
-    // 考虑index为0的情况
-    if(index==0){
-        newnode->next=head;
-        head->prev=newnode;
-        head=newnode;
-        return ;
-    }
-    // 应当找到指向下标为index-1的结点
+// 按值查找
+node *find_by_val(node *head, int val){
     node *tmp=head;
-    for(int i=0;i<index-1;i++){
-        if(tmp->next==NULL){
-            // 这里默认index太大插到末尾
-            printf("The index is big,so we have to insert %d into the end!\n",val);
-            break;
+    int cnt=0;
+    while(tmp!=NULL){
+        if(tmp->data==val){
+            printf("The index is %d,we find it !\n",cnt);
+            return tmp; //这里我们改变一直以来的方式，直接返回结点
         }
         tmp=tmp->next;
+        cnt++;
     }
-    // 找到位置后
-    node *q=tmp->next;
-    tmp->next=newnode;
-    newnode->prev=tmp;
-    newnode->next=q;
-    // 考虑q指向null的情况
-    if(q!=NULL){
-        q->prev=newnode;
+    return NULL; // 表示没找到
+}
+
+// 按下标查找
+node *find_by_index(node *head,int index){
+    node *tmp=head;
+    int cnt=0;
+    while(tmp!=NULL){
+        if(cnt==index){
+            // printf("The value is %d,we find it !\n",tmp->data);
+            return tmp;
+        }
+        tmp=tmp->next;
+        cnt++;
     }
+    printf("The index is false,we can't find!\n");
+    return NULL; //表示找不到
+}
+
+// 双向链表插入1[工作结点指向index]
+void insert1_two_way_list(node *&head,int index,int val){
+    // 建立新结点
+    node *newnode=creat_newnode(val);
+    // 找到index处结点
+    node *tmp=find_by_index(head,index);
+    if(tmp==NULL){
+        delete newnode;
+        return ;
+    }
+    // 插入处理
+    node *p=tmp->prev; //前驱
+    if(p==NULL){
+        // 说明要插入位置将作为头结点
+        head=newnode;
+    }
+    else{
+        p->next=newnode;
+    }
+    newnode->prev=p; //新节点前驱指向p
+    newnode->next=tmp;
+    tmp->prev=newnode;
 }
 
 // 双向链表插入2[工作结点指向index-1]
 void insert2_two_way_list(node *&head,int index,int val){
-    if(!head||index<=0){ //注意这里0是不允许的
-        printf("Invalid parameters to insert_elem\n");
-        return;
-    }
-    node *newnode=new node;
-    newnode->data=val;
-    newnode->prev=NULL;
-    newnode->next=NULL;
-    // 新结点建立完毕
-
-    if(index==1){ //考虑插在head之前情况
-        head->prev=newnode;
-        newnode->next=head;
-        head=newnode;
+    node *newnode=creat_newnode(val);
+    // 应当找到指向下标为index-1的结点
+    node *tmp=find_by_index(head,index-1);
+    if(tmp==NULL){
+        delete newnode;
         return ;
     }
-
-    // 应当找到指向下标为index的结点
-    node *tmp=head;
-    for(int i=0;i<index-2;i++){
-        if(tmp->next==NULL){
-            printf("The index is big,so we have to insert %d into the end!\n",val);
-            break;
-        }
-        tmp=tmp->next;
-    }
-    // 找到位置后
-    node *q=tmp->next;
+    // 插入处理
+    node *p=tmp->next; //p为index结点
     tmp->next=newnode;
     newnode->prev=tmp;
-    newnode->next=q;
-    if(q!=NULL){
-        q->prev=newnode;
+    newnode->next=p;
+    if(p!=NULL){
+        p->prev=newnode;
     }
 }
 
 // 双向链表插入3[工作结点指向index+1]
 void insert3_two_way_list(node *&head,int index,int val){
-    if(!head||index<-1){ //这里又变为-1
-        printf("Invalid parameters to insert_elem\n");
-        return;
-    }
-    node *newnode=new node;
-    newnode->data=val;
-    newnode->prev=NULL;
-    newnode->next=NULL;
-
-    // 做同样的工作
-    if(index==-1){
-        newnode->next=head;
-        head->prev=newnode;
-        head=newnode;
+    node *newnode=creat_newnode(val);
+    node *tmp=find_by_index(head,index+1);
+    if(tmp==NULL){
+        delete newnode;
         return ;
     }
-
-    node *tmp=head;
-    // 应当找到指向下标为index的结点
-    for(int i=0;i<index;i++){
-        if(tmp->next==NULL){
-            printf("The index is big,so we have to insert %d into the end!\n",val);
-            break;
-        }
-        tmp=tmp->next;
+    // 插入处理
+    node *p=tmp->prev; //p表示index结点
+    if(p->prev!=NULL){
+        p->prev->next=newnode;
     }
-    // 找到位置后
-    node *q=tmp->next; //q维护原index下标的结点
-    tmp->next=newnode;
-    newnode->prev=tmp;
-    newnode->next=q;
-    if(q!=NULL){
-        q->prev=newnode;
+    else{
+        head=newnode;
     }
+    newnode->prev=p->prev;
+    newnode->next=p;
+    p->prev=newnode;
 }
 
 // 双向链表删除1[工作结点指向index]
 void delete1_two_way_list(node *&head,int index){
-    if(!head||index<0){
-        printf("Invalid parameters to insert_elem --Delete1!\n");
-        return;
-    }
-    node *tmp=head;
-    for(int i=0;i<index;i++){
-        if(tmp->next==NULL){
-            printf("Index is large,we can't delete!!\n");
-            return ;
-        }
-        tmp=tmp->next;
+    node *tmp=find_by_index(head,index);
+    if(tmp==NULL){
+        return ;
     }
     // 找到index位置后
     if(index==0){ //没前驱
@@ -176,18 +159,9 @@ void delete1_two_way_list(node *&head,int index){
 
 // 双向链表删除2[工作结点指向index-1]
 void delete2_two_way_list(node *&head,int index){
-    if(!head||index<=0){
-        printf("Invalid parameters to insert_elem --Delete2!\n");
-        return;
-    }
-    node *tmp=head;
-    // 应当找到指向下标为index的结点
-    for(int i=0;i<index-1;i++){
-        if(tmp->next==NULL){
-            printf("Index is large,we can't delete!!\n");
-            return ;
-        }
-        tmp=tmp->next;
+    node *tmp=find_by_index(head,index-1);
+    if(tmp==NULL){
+        return ;
     }
     // 找到位置后
     if(index==1){ //没前驱
@@ -204,17 +178,9 @@ void delete2_two_way_list(node *&head,int index){
 
 // 双向链表删除3[工作结点指向index+1]
 void delete3_two_way_list(node *&head,int index){
-    if(!head||index<-1){
-        printf("Invalid parameters to insert_elem --Delete3!\n");
-        return;
-    }
-    node *tmp=head;
-    for(int i=0;i<index+1;i++){
-        if(tmp->next==NULL){
-            printf("Index is large,we can't delete!!\n");
-            return ;
-        }
-        tmp=tmp->next;
+    node *tmp=find_by_index(head,index+1);
+    if(tmp==NULL){
+        return ;
     }
     // 找到位置后
     // 找到index+1位置后
@@ -230,43 +196,13 @@ void delete3_two_way_list(node *&head,int index){
     delete tmp;
 }
 
-// 按值查找
-int find_by_val(node *head, int val){
-    if(!head)return -1;
-    node *tmp=head;
-    int cnt=0;
-    while(tmp!=NULL){
-        if(tmp->data==val){
-            printf("The index is %d,we find it !\n",cnt);
-            return cnt;
-        }
-        tmp=tmp->next;
-        cnt++;
-    }
-    return -1; // 表示没找到
-}
-
-// 按下标查找
-int find_by_index(node *head,int index){
-    if(!head)return -1;
-    node *tmp=head;
-    int cnt=0;
-    while(tmp!=NULL){
-        if(cnt==index){
-            printf("The value is %d,we find it !\n",tmp->data);
-            return tmp->data;
-        }
-        tmp=tmp->next;
-        cnt++;
-    }
-    printf("The index is false,we can't find!\n");
-    return -1; //表示找不到
-}
-
 // 打印函数
 void list_print(node *list){
     node *tmp=list;
     int cnt=0;
+    if(tmp!=NULL){
+        printf("Hello , I'm a haha listnode ,you can see my number :\n");
+    }
     while(tmp!=NULL){
         printf("NO.%d : %d\n",cnt,tmp->data);
         tmp=tmp->next;
@@ -280,19 +216,18 @@ int main(){
         init_end(head,i);
     }
     list_print(head);
-    int x;
-    cin>>x;
+    int x=3;
     // 调试insert1
     // insert1_two_way_list(head,x,-521);
     // success
     // 调试insert2
-    // insert2_two_way_list(head,x,-521);
+    insert1_two_way_list(head,5,-521);
     // success
     // 调试insert3
     // insert3_two_way_list(head,x,-521);
     // success
     // delete3_two_way_list(head,x);
-    find_by_val(head,x);
+    // find_by_val(head,x);
     list_print(head);
 
     return 0;

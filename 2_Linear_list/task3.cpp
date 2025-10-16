@@ -29,6 +29,9 @@ void init_from_end(node *&list, int val){
 void list_print(node *list){
     node *tmp=list;
     int cnt=0;
+    if(tmp!=NULL){
+        printf("Hello , I'm a haha listnode ,you can see my number :\n");
+    }
     while(tmp!=NULL){
         printf("NO.%d : %d\n",cnt,tmp->data);
         tmp=tmp->next;

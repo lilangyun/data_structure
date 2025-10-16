@@ -119,8 +119,9 @@ int main(){
     cout<<x<<endl;
     int ans=find_by_val(a,3);
     cout<<ans<<endl;
-    // get_average(a);
-    // print_elem(a);
     delete_SqList(a,(a.len-1)/2);
     print_elem(a);
+    get_average(a);
+    print_elem(a);
+    return 0;
 }

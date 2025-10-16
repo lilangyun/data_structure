@@ -104,7 +104,9 @@ datatype find_by_index(node *head,int index){
 // 打印
 void list_print(node *head){
     node *tmp=head->next;
-    int cnt=0;
+    int cnt=0;if(tmp->next!=NULL){
+        printf("Hello , I'm a haha listnode ,you can see my number :\n");
+    }
     while(tmp!=NULL){
         printf("NO.%d : %d\n",cnt,tmp->data);
         tmp=tmp->next;
@@ -127,18 +129,22 @@ int main(){
     node *head = new node;
     head->next = NULL;
     int x;
+    printf("Please input your number : ");
     for(int i=0;i<7;i++){
         scanf("%d",&x);
-        init_from_head(head,x);
+        init_from_end(head,x);
     }
     list_print(head);
 
-    delete_elem(head,6);
+    insert_elem(head,8,3);
     list_print(head);
 
-    int ans=find_by_val(head,4);
+    delete_elem(head,3);
+    list_print(head);
+
+    int ans=find_by_index(head,4);
     if(ans!=-1){
-        printf("The number 's index is : %d\n",ans);
+        printf("The number is : %d\n",ans);
     }
     // 释放链表
     list_free(head);
