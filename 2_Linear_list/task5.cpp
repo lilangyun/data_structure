@@ -1,15 +1,12 @@
+/*
+* 必做任务5
+*/
+
 // 利用链表进行多项式的构建、加减、乘除
 #include<iostream>
 #include<math.h>
+#include "task5.h"
 using namespace std;
-
-#define zerodegree 1e-3 //判断浮点数是否为0
-
-typedef struct term{
-    float coef; //系数
-    int expn; //指数
-    term *next; //书中竟然没有next,这使我对它的参考价值低看了
-}term;
 
 // 指数比较
 int cmp(int e1,int e2){
@@ -74,6 +71,7 @@ void list_free(term *&list){
         cur=p->next;
         delete p;
     }
+    delete cur;
 }
 
 // 实现多项式的加减
@@ -223,29 +221,13 @@ int main(){
         creat_polyn(a,i,i);
     }
     print_polyn(a);
-    // for(int i=1;i<=3;i++){
-    //     creat_polyn(a,-i,i);
-    // }
-    // print_polyn(a);
     for(int i=1;i<=2;i++){
         creat_polyn(b,i,i);
     }
     print_polyn(b);
-
     // test
-    // sub_polyn(a,b);
-
-    // // 打印
-    // print_polyn(a);
-    // print_polyn(b);
-
-    // test multiply
     multi_polyn(a,b);
-
     print_polyn(a);
-
-    // 销毁多项式
-    list_free(a);
-    // b在加减操作中已经销毁
+    list_free(a); // b在加减操作中已经销毁
     return 0;
 }

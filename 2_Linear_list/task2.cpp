@@ -1,8 +1,12 @@
+/*
+* 必做任务2,源代码
+*/
 #include<iostream>
 using namespace std;
 
 #define datatype int
 
+// 单链表
 typedef struct node{
     datatype data;
     node *next;
@@ -104,7 +108,8 @@ datatype find_by_index(node *head,int index){
 // 打印
 void list_print(node *head){
     node *tmp=head->next;
-    int cnt=0;if(tmp->next!=NULL){
+    int cnt=0;
+    if(tmp->next!=NULL){
         printf("Hello , I'm a haha listnode ,you can see my number :\n");
     }
     while(tmp!=NULL){
@@ -129,7 +134,8 @@ int main(){
     node *head = new node;
     head->next = NULL;
     int x;
-    printf("Please input your number : ");
+    int count=7;
+    printf("Please input your %d numbers : ",count);
     for(int i=0;i<7;i++){
         scanf("%d",&x);
         init_from_end(head,x);

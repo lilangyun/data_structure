@@ -1,15 +1,9 @@
+/*
+* 必做任务4,源代码
+*/
 #include<iostream>
+#include "task4.h"
 using namespace std;
-
-// 自己竟然全部实现错了，啊！
-
-// 我们先默认数据类型为int类型
-typedef struct node{
-    node *prev; //前驱
-    int data;
-    node *next; //后继
-}node;
-// 默认双向链表无头结点
 
 // 我们把创建新节点封装成一个函数，减少代码量
 node *creat_newnode(int val){
@@ -144,16 +138,15 @@ void delete1_two_way_list(node *&head,int index){
     if(tmp==NULL){
         return ;
     }
-    // 找到index位置后
-    if(index==0){ //没前驱
-        head=head->next;
-        delete tmp;
-        return ;
+    if(tmp->prev!=NULL){
+        tmp->prev->next=tmp->next;
     }
-    if(tmp->next!=NULL){ //没后继
+    else{// 说明要删除首结点
+        head=tmp->next;
+    }
+    if(tmp->next!=NULL){
         tmp->next->prev=tmp->prev;
     }
-    tmp->prev->next=tmp->next;
     delete tmp;
 }
 
@@ -163,17 +156,17 @@ void delete2_two_way_list(node *&head,int index){
     if(tmp==NULL){
         return ;
     }
-    // 找到位置后
-    if(index==1){ //没前驱
-        head=head->next;
-        delete tmp;
+    //tmp现在指向要删除位置的前驱
+    node *p=tmp->next; //p现在指向要删除位置index
+    if(p==NULL){
+        printf("We can't delete empty element! Sorry!--delete2\n");
         return ;
     }
-    if(tmp->next!=NULL){ //没后继
-        tmp->next->prev=tmp->prev;
+    tmp->next=p->next;
+    if(p->next!=NULL){
+        p->next->prev=tmp;
     }
-    tmp->prev->next=tmp->next;
-    delete tmp;
+    delete p;
 }
 
 // 双向链表删除3[工作结点指向index+1]
@@ -182,18 +175,18 @@ void delete3_two_way_list(node *&head,int index){
     if(tmp==NULL){
         return ;
     }
-    // 找到位置后
-    // 找到index+1位置后
-    if(index==-1){ //没前驱
-        head=head->next;
-        delete tmp;
-        return ;
+    node *p=tmp->prev; //p现在指向index位置
+    if(p==NULL){
+        printf("We can't delete empty element! Sorry!--delete3\n");
     }
-    if(tmp->next!=NULL){ //没后继
-        tmp->next->prev=tmp->prev;
+    if(p->prev!=NULL){
+        p->prev->next=tmp;
     }
-    tmp->prev->next=tmp->next;
-    delete tmp;
+    else{ //说明要删除首结点
+        head=p->next;
+    }
+    tmp->prev=p->prev;
+    delete p;
 }
 
 // 打印函数
@@ -210,6 +203,17 @@ void list_print(node *list){
     }
 }
 
+// 销毁链表
+void list_free(node *&list){
+     // 释放链表
+    node *cur=list;
+    while(cur){
+        node *next=cur->next;
+        delete cur;
+        cur=next;
+    }
+}
+
 int main(){
     node *head=NULL;
     for(int i=1;i<=5;i++){
@@ -217,18 +221,10 @@ int main(){
     }
     list_print(head);
     int x=3;
-    // 调试insert1
-    // insert1_two_way_list(head,x,-521);
-    // success
-    // 调试insert2
-    insert1_two_way_list(head,5,-521);
-    // success
-    // 调试insert3
-    // insert3_two_way_list(head,x,-521);
-    // success
-    // delete3_two_way_list(head,x);
-    // find_by_val(head,x);
+    insert1_two_way_list(head,x,-5201314);
     list_print(head);
-
+    delete1_two_way_list(head,x);
+    list_print(head);
+    list_free(head);
     return 0;
 }

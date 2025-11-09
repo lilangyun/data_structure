@@ -1,13 +1,9 @@
+/*
+* 必做任务3,源代码
+*/
 #include<iostream>
+#include "task3.h"
 using namespace std;
-
-typedef struct node{
-    int data;
-    node *next;
-}ndoe;
-
-// 设计一个将不带头结点链表反转的算法
-// 最后不还是需要头节点吗
 
 // 尾插法创建链表
 void init_from_end(node *&list, int val){

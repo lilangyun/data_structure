@@ -1,14 +1,14 @@
+/*
+* 必做任务1,源代码
+*/
+
 #include<iostream>
 #include<stdlib.h>
+#include "task1.h"
 using namespace std;
 
 #define capacity 100
 #define datatype int
-
-typedef struct{
-    datatype *head;
-    int len;
-}SqList;
 
 // 创建顺序表
 void init_SqList(SqList &sqlist){

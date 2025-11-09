@@ -1,3 +1,7 @@
+/*
+* 选做任务1
+*/
+
 #include<iostream>
 using namespace std;
 
@@ -21,26 +25,28 @@ void mov_list(List *&list,int n){
             *(list->data+i+1)=*(list->data+i);
         }
         *list->data=t;
-    }
+    }//复杂度较高
 }
 
 // 输出顺序表中的元素
 void print_elem(List *&list){
     int len=list->length;
+    printf("Hello , I'm a haha listnode ,you can see my number :\n");
     for(int i=0;i<len;i++){
-        printf("NO.%d is %d!\n",i,list->data[i]);
+        printf("NO.%d is %d .\n",i,list->data[i]);
     }
 }
 
 int main(){
     int n;
+    cout<<"Please input the number you want to move :"<<endl;
     cin>>n;
     List *list=new List;
     list->length=0;
     for(int i=0;i<=4;i++){
         list->data[i]=i+1;
         list->length++;
-        // 这里还需要改进，要加入插入算法
+        // 这里还可以改进，要加入插入算法
     }
     print_elem(list);
     mov_list(list,n);
