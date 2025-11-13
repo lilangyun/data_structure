@@ -1,22 +1,12 @@
 /*
-* 必做题4·源代码
+* 必做题4(1)·源代码
 */
 #include<iostream>
 #include<stdarg.h>
+#include "./task4_1.h"
 using namespace std;
 
-#define OVERFLOW 3
-#define UNDERFLOW 4
-#define MAXDIM 8
-
-typedef struct{
-    int *base;  //数组基址
-    int dim;  //是几维数组
-    int *bouds;  //每个维度有多少个元素值
-    int *constants;  //用于计算偏移量
-}Array;
-
-int InitiArray(Array *A,int dim,...){
+int InitiArray(Array *&A,int dim,...){
     // 这是我第一次接触省略号的可变参数
     if(dim<1||dim>MAXDIM){
         return -1;
@@ -51,7 +41,7 @@ int InitiArray(Array *A,int dim,...){
     return 0;
 }
 
-int DestroyArray(Array *A){
+int DestroyArray(Array *&A){
     if(A->base){
         delete A->base;
         A->base=NULL;
@@ -76,13 +66,9 @@ int DestroyArray(Array *A){
     return 0;
 }
 
-int Locate(){
-
-}
-
-int Value(Array *A,int *val,...){  //取值操作
+int Value(Array *&A,int *val,...){  //取值操作
     va_list ap;
-    int off;  //相对于基地址的偏移量
+    int off=0;  //相对于基地址的偏移量(切记一定要初始化为0)
     int dim=A->dim;
     int i;
     va_start(ap,val);
@@ -95,11 +81,12 @@ int Value(Array *A,int *val,...){  //取值操作
     return 0;
 }
 
-int Assign(Array *A,int val,...){  //赋值操作
+int Assign(Array *&A,int val,...){  //赋值操作
     va_list ap;
-    int off;
+    int off=0;  //切记初始化为0
     int dim=A->dim;
     int i;
+    va_start(ap,val);
     for(i=0;i<dim;i++){
         int ind=va_arg(ap,int);  //这里还需要补充错误情况的处理
         off+=A->constants[i]*ind;
@@ -110,6 +97,15 @@ int Assign(Array *A,int val,...){  //赋值操作
 }
 
 int main(){
-    
+    Array *A=new Array;
+    InitiArray(A,2,1,2,2);  //这相当于A[1][2]
+    Assign(A,2,0,0,0);
+    int *v=new int;
+    Value(A,v,0,0,0);
+    cout<<*v<<endl;
+    Assign(A,1,0,1,0);
+    Value(A,v,0,1,0);
+    cout<<*v<<endl;
+    DestroyArray(A);
     return 0;
 }

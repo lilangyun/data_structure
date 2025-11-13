@@ -2,7 +2,7 @@
 * 必做题1_2_3·源代码
 */
 #include<iostream>
-#include "test1_2_3.h"
+#include "./task1_2_3.h"
 using namespace std;
 
 // 建立目标串和模式串
