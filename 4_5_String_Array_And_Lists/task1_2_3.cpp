@@ -2,7 +2,8 @@
 * 必做题1_2_3·源代码
 */
 #include<iostream>
-#include "./task1_2_3.h"
+#include<string.h>
+#include "task1_2_3.h"
 using namespace std;
 
 // 建立目标串和模式串
@@ -125,16 +126,16 @@ int kmp(HString *s,HString *t){
 int main(){
     char a1[100],a2[100];
     cout<<"Please cin your main string:"<<endl;
-    cin>>a1;
+    cin.getline(a1,100);
     cout<<"Please cin your mode string:"<<endl;
-    cin>>a2;
+    cin.getline(a2,100);
     HString *s=creatNewHString();
     HString *t=creatNewHString();
     strAssign(s,a1);
     cout<<"Your main string is : "<<s->ch<<endl;
     strAssign(t,a2);
     cout<<"Your mode string is : "<<t->ch<<endl;
-    cout<<"The match result is : "<<easyModeMatch(s,t)<<"  --easyModeMatch"<<endl;
+    // cout<<"The match result is : "<<easyModeMatch(s,t)<<"  --easyModeMatch"<<endl;
     cout<<"The match result is : "<<kmp(s,t)<<"  --kmp"<<endl;
     deleteHString(s);
     deleteHString(t);

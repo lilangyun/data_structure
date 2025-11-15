@@ -1,49 +1,25 @@
+/*
+* 必做题4(2)·源代码
+*/
 #include<iostream>
+#include "task4_2.h"
 using namespace std;
 
-#define MAXSIZE 1200
-
-typedef struct{
-    int i,j;
-    int val;
-}Triple;
-
-typedef struct{
-    Triple data[MAXSIZE+1];
-    int mu,nu,tu;  //行、列、非零元个数 
-}TsMatrix;  //三元组矩阵
-
-typedef struct OLNode{
-    int i,j;
-    int val;
-    struct OLNode*down,*right;
-}OLNode,*OLink;
-
-typedef struct{
-    OLink *rhead,*chead;  //row_head and column_head
-    int mu,nu,tu;
-}CrossList;  //十字链表
-
-void create_TsMatrix(TsMatrix*&M);
-
-TsMatrix* transpose_TsMatrix(TsMatrix*M);
-
-void printTsMatrix(TsMatrix *M);
-
-void creatCrossList(CrossList*M);
-
-void printCrossLink(CrossList*M);
-
 int main(){
-    // TsMatrix *M=new TsMatrix;
-    // create_TsMatrix(M);
-    // printTsMatrix(M);
-    // TsMatrix *T=transpose_TsMatrix(M);
-    // cout<<"--------------The original matrix is transposed---------------"<<endl;
-    // printTsMatrix(T);
-    CrossList *M=new CrossList;
-    creatCrossList(M);
-    printCrossLink(M);
+    TsMatrix *M=new TsMatrix;
+    create_TsMatrix(M);
+    printTsMatrix(M);
+    TsMatrix *T=transpose_TsMatrix(M);
+    cout<<"--------------The original matrix is transposed---------------"<<endl;
+    printTsMatrix(T);
+    // 十字链表版本
+    cout<<"--------------The crosslist version---------------"<<endl;
+    CrossList *R=new CrossList;
+    creatCrossList(R);
+    printCrossLink(R);
+    cout<<"--------------The original matrix is transposed---------------"<<endl;
+    CrossList*K=transpose_CrossList(R);
+    printCrossLink(K);
     return 0;
 }
 
@@ -104,7 +80,10 @@ void creatCrossList(CrossList*M){
         M->chead[i]=NULL;
     }
     int i,j,val;
-    while(cin>>i>>j>>val){
+    cout<<"Next,input your i,j and val:"<<endl;
+    int cnt=0;
+    while(cnt<tu){
+        cin>>i>>j>>val;
         // 这里还可以添加对i,j,val的进一步有效检验
         OLNode *temp;
         if(!(temp=(OLNode*)malloc(sizeof(OLNode)))){
@@ -138,16 +117,69 @@ void creatCrossList(CrossList*M){
             temp->down=tt->down;
             tt->down=temp;
         }
+        cnt++;
     }
 }
 
+CrossList *transpose_CrossList(CrossList *M){
+    CrossList *T=new CrossList;
+    T->mu=M->nu;
+    T->nu=M->mu;
+    T->tu=M->tu;
+    if(!(T->rhead=(OLink*)malloc((T->mu+1)*sizeof(OLink)))||!(T->chead=(OLink*)malloc((T->nu+1)*sizeof(OLink)))){
+        cout<<"The OLink can not be created!-----"<<endl;
+        exit(0);
+    }
+    for(int i=0;i<=T->mu;i++){
+        T->rhead[i]=NULL;
+    }
+    for(int i=0;i<=T->nu;i++){
+        T->chead[i]=NULL;
+    }
+    for(int i=1;i<=T->mu;i++){
+        // 以列为主序遍历十字链表M
+        OLNode *tmp=M->chead[i];
+        OLNode *tend=T->rhead[i];  //这里维护T的最后一个非零元位置
+        while(tmp!=NULL){
+            OLNode *node=new OLNode;
+            node->i=tmp->j;
+            node->j=tmp->i;
+            int j=node->j;
+            node->val=tmp->val;
+            node->down=node->right=NULL;
+            if(tend==NULL){
+                T->rhead[i]=node;
+                tend=node;
+            }
+            else{
+                tend->right=node;
+                tend=node;
+            }
+            if(T->chead[j]==NULL||T->chead[j]->i>node->i){
+                node->down=T->chead[j];
+                T->chead[j]=node;
+            }
+            else{
+                OLNode *tt=T->chead[j];
+                while(tt->down!=NULL&&tt->down->i<node->i){
+                    tt=tt->down;
+                }
+                node->down=tt->down;
+                tt->down=node;
+            }
+            tmp=tmp->down;
+        }
+    }
+    return T;
+}
+
 void printCrossLink(CrossList*M){
+    cout<<"The crosslink is : "<<endl;
     for(int i=1;i<=M->mu;i++){
         OLNode *temp=M->rhead[i];
         while(temp!=NULL){
-            cout<<"row:"<<i<<"  column:"<<temp->j<<"  val:"<<temp->val<<endl;
+            cout<<i<<"  "<<temp->j<<"  "<<temp->val<<"  "<<endl;  //这里报错说明值没有输入进去
             temp=temp->right;
         }
     }
 }
-

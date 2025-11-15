@@ -3,8 +3,28 @@
 */
 #include<iostream>
 #include<stdarg.h>
-#include "./task4_1.h"
+#include "task4_1.h"
 using namespace std;
+
+int main(){
+    Array *A=new Array;
+    InitiArray(A,2,1,2);  //这相当于A[1][2]
+    int x=520;
+    int a=0,b=0;
+    cout<<"Assign 520 to A[0][0]"<<endl;
+    Assign(A,x,a,b);
+    int *v=new int;
+    Value(A,v,a,b);
+    cout<<"The A[0][0] is : "<<*v<<endl;
+    x=1314;
+    b=1;
+    cout<<"Assign 1314 to A[0][1]"<<endl;
+    Assign(A,x,a,b);
+    Value(A,v,a,b);
+    cout<<"The A[0][1] is : "<<*v<<endl;
+    DestroyArray(A);
+    return 0;
+}
 
 int InitiArray(Array *&A,int dim,...){
     // 这是我第一次接触省略号的可变参数
@@ -93,19 +113,5 @@ int Assign(Array *&A,int val,...){  //赋值操作
     }
     va_end(ap);
     A->base[off]=val;
-    return 0;
-}
-
-int main(){
-    Array *A=new Array;
-    InitiArray(A,2,1,2,2);  //这相当于A[1][2]
-    Assign(A,2,0,0,0);
-    int *v=new int;
-    Value(A,v,0,0,0);
-    cout<<*v<<endl;
-    Assign(A,1,0,1,0);
-    Value(A,v,0,1,0);
-    cout<<*v<<endl;
-    DestroyArray(A);
     return 0;
 }
