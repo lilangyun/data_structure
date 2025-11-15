@@ -22,6 +22,7 @@ int main(){
     Assign(A,x,a,b);
     Value(A,v,a,b);
     cout<<"The A[0][1] is : "<<*v<<endl;
+    delete v;
     DestroyArray(A);
     return 0;
 }
@@ -63,21 +64,21 @@ int InitiArray(Array *&A,int dim,...){
 
 int DestroyArray(Array *&A){
     if(A->base){
-        delete A->base;
+        delete[] A->base;
         A->base=NULL;
     }
     else{
         return -1;
     }
     if(A->bouds){
-        delete A->bouds;
+        delete[] A->bouds;
         A->bouds=NULL;
     }
     else{
         return -1;
     }
     if(A->constants){
-        delete A->constants;
+        delete[] A->constants;
         A->constants=NULL;
     }
     else{

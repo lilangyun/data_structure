@@ -77,7 +77,11 @@ void get_next(int *next,HString *t){
     next[0]=-1;  //-1表示开头字符不等，应移动至下一字符
     while(i<t->length&&j<t->length){
         if(j==-1||t->ch[i]==t->ch[j]){
-            i++;j++;next[i]=j;
+            i++;j++;
+            if(i>=t->length){
+                break;
+            }
+            next[i]=j;
         }
         else{
             j=next[j];
@@ -91,6 +95,9 @@ void get_nextval(int *nextval,HString *t){
     while(i<t->length&&j<t->length){
         if(j==-1||t->ch[i]==t->ch[j]){
             i++;j++;
+            if(i>=t->length){
+                break;
+            }
             if(t->ch[i]==t->ch[j]){
                 nextval[i]=nextval[j];
             }
@@ -117,6 +124,7 @@ int kmp(HString *s,HString *t){
             j=next[j];  //i指针不回退
         }
     }
+    delete[] next;
     if(j>=t->length){
         return i-t->length;
     }
@@ -135,7 +143,7 @@ int main(){
     cout<<"Your main string is : "<<s->ch<<endl;
     strAssign(t,a2);
     cout<<"Your mode string is : "<<t->ch<<endl;
-    // cout<<"The match result is : "<<easyModeMatch(s,t)<<"  --easyModeMatch"<<endl;
+    cout<<"The match result is : "<<easyModeMatch(s,t)<<"  --easyModeMatch"<<endl;
     cout<<"The match result is : "<<kmp(s,t)<<"  --kmp"<<endl;
     deleteHString(s);
     deleteHString(t);

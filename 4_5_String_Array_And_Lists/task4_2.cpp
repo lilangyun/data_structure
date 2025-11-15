@@ -59,7 +59,7 @@ void printTsMatrix(TsMatrix *M){
     int mu=M->mu,nu=M->nu,tu=M->tu;
     cout<<"The matrix's non-zero elements are followed by:"<<endl;
     for(int t=1;t<=tu;t++){
-        cout<<M->data[t].i<<"  "<<M->data[t].j<<"  "<<M->data[t].val<<endl;
+        cout<<"("<<M->data[t].i<<","<<M->data[t].j<<") "<<M->data[t].val<<endl;
     }
 }
 
@@ -68,7 +68,7 @@ void creatCrossList(CrossList*M){
     int mu,nu,tu;
     cout<<"Input your mu,nu and tu:"<<endl;
     cin>>mu>>nu>>tu;
-    M->mu=mu;M->nu=mu;M->tu=tu;
+    M->mu=mu;M->nu=nu;M->tu=tu;
     if(!(M->rhead=(OLink*)malloc((mu+1)*sizeof(OLink)))||!(M->chead=(OLink*)malloc((nu+1)*sizeof(OLink)))){
         cout<<"The OLink can not be created!-----"<<endl;
         exit(0);
@@ -178,7 +178,7 @@ void printCrossLink(CrossList*M){
     for(int i=1;i<=M->mu;i++){
         OLNode *temp=M->rhead[i];
         while(temp!=NULL){
-            cout<<i<<"  "<<temp->j<<"  "<<temp->val<<"  "<<endl;  //这里报错说明值没有输入进去
+            cout<<"("<<i<<","<<temp->j<<")  "<<temp->val<<endl;  //这里报错说明值没有输入进去
             temp=temp->right;
         }
     }
