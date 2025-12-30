@@ -1,7 +1,7 @@
 /*
 * 必做任务·头文件
 */
-#define ELEMTYPE char  //还可以是char类型,string类等
+#define ELEMTYPE int  //还可以是char类型,string类等
 #define ENDNUM -1
 #define ENDCHAR '0'
 

@@ -9,10 +9,17 @@ using namespace std;
 int main(){
     BiTree T=NULL;
     creatBiTree(T);
+    cout<<"该树的先序输出为: ";
+    print_preorder(T);
+    cout<<endl;
+    cout<<"该树的中序输出为: ";
     print_inorder(T);
     cout<<endl;
-    cout<<calculate_leafnode(T)<<endl;
-    cout<<depth_bitnode(T)<<endl;
+    cout<<"该树的后序输出为: ";
+    print_postorder(T);
+    cout<<endl;
+    cout<<"树的叶子节点数为: "<<calculate_leafnode(T)<<endl;
+    cout<<"树的深度为: "<<depth_bitnode(T)<<endl;
     destroy_tree(T);
     return 0;
 }
@@ -21,7 +28,7 @@ int main(){
 void creatBiTree(BiTree&T){
     ELEMTYPE it;
     cin>>it;
-    if(it!=ENDCHAR){
+    if(it!=ENDNUM){
         T=new BiTNode;
         T->lchild=NULL;
         T->rchild=NULL;
