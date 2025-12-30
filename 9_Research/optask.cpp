@@ -54,7 +54,7 @@ STATUS Insert_BST(BiTree &T, ELEMTYPE key){
 // 创建二叉排序树
 void Create(BiTree &T, int n){
     ELEMTYPE data;
-    cout<<"请输入数据"<<endl;
+    cout<<"Please input the elements:"<<endl;
     for(int i = 0; i < n; i++){
         cin>>data;
         Insert_BST(T, data);
@@ -64,25 +64,25 @@ void Create(BiTree &T, int n){
 int main(){
     BiTree T = NULL;
     int n;
-    cout<<"请输入该查找表有多少数字元素"<<endl;
+    cout<<"Please input how many elements?"<<endl;
     cin>>n;
     Create(T, n);
     int tmp;
-    cout<<"请输入待查找元素"<<endl;
+    cout<<"Please input the element you want to find:"<<endl;
     cin>>tmp;
     BiTree p;
     if(Search_BST(T, tmp, NULL, p)){
         if(p->lchild && p->rchild)
-            printf("%d 的左右子分别为：%d, %d\n", tmp, p->lchild->data, p->rchild->data);
+            printf("The leftchild and rightchild of the element %d are: %d, %d\n", tmp, p->lchild->data, p->rchild->data);
         else if(p->lchild)
-            printf("%d 无右子，它的左子为：%d\n", tmp, p->lchild->data);
+            printf("The element %d doesn't have rightchild, it's leftchild is: %d\n", tmp, p->lchild->data);
         else if(p->rchild)
-            printf("%d 无左子，它的右子为：%d\n", tmp, p->rchild->data);
+            printf("The element %d doesn't have leftchild, it's rightchild is: %d\n", tmp, p->rchild->data);
         else
-            printf("%d 是一个叶子结点\n");
+            printf("The element %d is a leafnode.\n", tmp);
     }
     else{
-        cout<<"没找到"<<endl;
+        cout<<"I can't find it."<<endl;
     }
     return 0;
 }

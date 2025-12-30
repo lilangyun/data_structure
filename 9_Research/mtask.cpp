@@ -15,7 +15,7 @@ typedef struct {
 void Create(SSTable &ST, int n){  // 这里使用&传递才能修改值
     ST.elem = new ELEMTYPE[n+1];
     ST.length = 0;
-    cout<<"请输入数据"<<endl;
+    cout<<"Please input the elements:"<<endl;
     for(int i = 1; i <= n; i++){
         int key;
         cin>>key;
@@ -67,25 +67,25 @@ int Search_bin(SSTable ST, ELEMTYPE key, int *cnt){
 int main(){
     SSTable ST;
     int n, key, tmp;
-    cout<<"请输入该查找表有多少数字元素"<<endl;
+    cout<<"Please input how many elements?"<<endl;
     cin>>n;
     Create(ST, n);
-    cout<<"请输入待查找元素"<<endl;
+    cout<<"Please input the element you want to find:"<<endl;
     cin>>key;
     if((tmp = Search_Seq(ST, key)) > 0){
-        printf("元素%d位于%d   (Search_Seq)\n", key, tmp);
+        printf("The element %d is located in %d.   (Search_Seq)\n", key, tmp);
     }
     else{
-        printf("没找到%d   (Search_Seq)\n", key);
+        printf("I can't find the element %d.   (Search_Seq)\n", key);
     }
     int *cnt = new int;
     *cnt = 0;  // 比较关键字次数
     if((tmp = Search_bin(ST, key, cnt)) > 0){
-        printf("元素%d位于%d   (Search_bin)\n", key, tmp);
-        printf("比较关键字次数为%d   (Search_bin)\n", *cnt);
+        printf("The element %d is located in %d.   (Search_bin)\n", key, tmp);
+        printf("The number of comparisons is %d.   (Search_bin)\n", *cnt);
     }
     else{
-        printf("没找到%d   (Search_bin)\n", key);
+        printf("I can't find the element %d.   (Search_bin)\n", key);
     }
     return 0;
 }
