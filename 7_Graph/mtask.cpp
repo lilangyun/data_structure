@@ -2,6 +2,7 @@
 * 必做任务·源代码
 */
 #include<iostream>
+#include<stack>  //导入栈
 #include<queue>  //导入队列
 using namespace std;
 
@@ -98,12 +99,29 @@ int GetNextNeighbor(AdjGraph& G,int v,int w){
 void dfs(AdjGraph& G,int v,int visited[]){
     Visit(G,v);  //访问顶点v
     visited[v]=1;  ///标志数组
-    int w=GetFirstNeighbor(G,v);
-    while(w!=-1){
+    
+    for(int w = GetFirstNeighbor(G,v); w != -1; w = GetNextNeighbor(G, v, w)){
         if(!visited[w]){
-            dfs(G,w,visited);
+            dfs(G, w, visited);
         }
-        w=GetNextNeighbor(G,v,w);
+    }
+}
+
+// 非递归实现
+void dfs_s(AdjGraph& G,int v,int visited[]){  // 这里visited表示是否入过栈而不是是否访问
+    stack<int>s;
+    s.push(v);
+    visited[v] = 1;  // 入栈
+    while(!s.empty()){
+        int w = s.top();
+        s.pop();
+        Visit(G, w);
+        for(int k = GetFirstNeighbor(G, w); k != -1; k = GetNextNeighbor(G, w, k)){
+            if(!visited[k]){
+                s.push(k);
+                visited[k] = 1;
+            }
+        }
     }
 }
 
@@ -115,7 +133,7 @@ void Graph_Traverse_DFS(AdjGraph G){
     }
     for(int i=0;i<G.n;i++){  //解决连通分量问题
         if(!visited[i]){
-            dfs(G,i,visited);
+            dfs_s(G,i,visited);
         }
     }
     delete[] visited;
@@ -130,6 +148,7 @@ void bfs(AdjGraph& G,int v,int visited[]){
     while(!q.empty()){
         v=q.front();
         q.pop();  //对头出队
+
         int w=GetFirstNeighbor(G,v);
         while(w!=-1){
             if(!visited[w]){
