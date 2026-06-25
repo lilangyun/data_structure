@@ -7,7 +7,6 @@
 using namespace std;
 
 // 建立目标串和模式串
-
 HString *creatNewHString(){
     HString *s=new HString;
     s->ch=NULL;

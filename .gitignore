@@ -1,0 +1,33 @@
+# 编译输出文件
+*.exe
+*.out
+*.app
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.class
+
+# IDE 和编辑器配置
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 常见构建目录
+build/
+bin/
+lib/
+cmake-build-debug/
+cmake-build-release/
+
+# 数据与临时文件
+*.log
+*.tmp
+*.bak
+*.dat
+*.txt   # 如果仓库不含必须的文本数据文件，可考虑忽略；否则需删除此行
